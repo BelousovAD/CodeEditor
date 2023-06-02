@@ -20,13 +20,7 @@ private:
     void OnItemMenu(wxTreeEvent& event);
 
     void RedirectToParent(wxCommandEvent& event);
-    void OnDeleteFile(wxCommandEvent& event);
-    void OnExcludeFile(wxCommandEvent& event);
-    void OnSetFileAsMain(wxCommandEvent& event);
-    void OnFileUp(wxCommandEvent& event);
-    void OnFileDown(wxCommandEvent& event);
 
-    void ExcludeFile(const wxString& filename);
 private:
     wxTreeItemId m_root;
 };

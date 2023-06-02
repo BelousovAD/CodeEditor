@@ -8,8 +8,11 @@
 #include "wx/stc/stc.h"
 #include "wx/treectrl.h"
 
+#include "ImportsList.h"
 #include "Notebook.h"
 #include "ProjectExplorer.h"
+#include "CodeEditorConfig.h"
+#include "Console.h"
 
 #ifndef WX_PRECOMP
 	#include <wx/wx.h>
@@ -32,6 +35,11 @@ private:
 	void OnProjectOpen(wxCommandEvent& event);
 	void OnProjectClose(wxCommandEvent& event);
 
+	void OnDirAppend(wxCommandEvent& event);
+	void OnDirUp(wxCommandEvent& event);
+	void OnDirDown(wxCommandEvent& event);
+	void OnDirDelete(wxCommandEvent& event);
+
 	void OnCreateFile(wxCommandEvent& event);
 	void OnOpenFile(wxCommandEvent& event);
 	void OnSetFileAsMain(wxCommandEvent& event);
@@ -41,6 +49,10 @@ private:
 	void OnIncludeFile(wxCommandEvent& event);
 	void OnDeleteFile(wxCommandEvent& event);
 
+	void OnCompile(wxCommandEvent& event);
+	void OnBuild(wxCommandEvent& event);
+	void OnExecute(wxCommandEvent& event);
+
 	void OnExit(wxCommandEvent& event);
 	void OnCloseWindow(wxCloseEvent& event);
 
@@ -48,16 +60,24 @@ private:
 
 	void OnUpdateFileMenu(wxUpdateUIEvent& event);
 	void OnUpdateProjectMenu(wxUpdateUIEvent& event);
+	void OnUpdateRunMenu(wxUpdateUIEvent& event);
 	void OnUpdateHighlightMenu(wxUpdateUIEvent& event);
 	void OnUpdateTargetPlatformMenu(wxUpdateUIEvent& event);
 
-	void LoadProject();
+private:
+	bool SyncExecWithCaptureOutput(const wxString command, const wxString cwd, const wxString appName);
+	bool SyncExec(const wxString command, const wxString cwd, const wxString appName);
 	void SetProjectState(const bool& changed = true);
+	void SaveCompileInfo(const wxString& filepath);
 
+	ImportsList* CreateImportsList();
 	wxMenuBar* CreateMenuBar();
 	Notebook* CreateNotebook();
 	ProjectExplorer* CreateProjectExplorer();
+	Console* CreateConsole();
 	bool CreateNewFile(const wxString& filepath);
+	void CreateTempDirectories();
+	void ClearTempDirectories();
 	void IncludeFile(const wxString& filename);
 	void ExcludeFile(const int& index, const wxString& filename);
 
@@ -65,9 +85,12 @@ private:
 
 private:
 	wxAuiManager* m_AuiManager = nullptr;
+	ImportsList* m_ImportsList = nullptr;
 	Notebook* m_Notebook = nullptr;
+	Console* m_Console = nullptr;
 	ProjectExplorer* m_ProjectExplorer = nullptr;
 
 	long m_NotebookStyle = NULL;
 	ProjectInfo* m_projectInfo = nullptr;
+	CodeEditorConfig m_config;
 };
