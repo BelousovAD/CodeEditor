@@ -66,7 +66,7 @@ private:
 
 private:
 	bool SyncExecWithCaptureOutput(const wxString command, const wxString cwd, const wxString appName);
-	bool SyncExec(const wxString command, const wxString cwd, const wxString appName);
+	bool AsyncExec(const wxString command, const wxString cwd, const wxString appName);
 	void SetProjectState(const bool& changed = true);
 	void SaveCompileInfo(const wxString& filepath);
 

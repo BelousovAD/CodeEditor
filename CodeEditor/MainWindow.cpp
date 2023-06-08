@@ -619,7 +619,7 @@ void MainWindow::OnExecute(wxCommandEvent& event) {
 				wxOK, this);
 			return;
 		}
-		SyncExec(batFilePath, dir.GetName(), m_projectInfo->execFile);
+		AsyncExec(batFilePath, dir.GetName(), m_projectInfo->execFile);
 	}
 	else {
 		wxMessageBox(_("Need to build a project."),
@@ -739,7 +739,7 @@ bool MainWindow::SyncExecWithCaptureOutput(const wxString command, const wxStrin
 	return code == 0;
 }
 
-bool MainWindow::SyncExec(const wxString batFilePath, const wxString cwd, const wxString appName) {
+bool MainWindow::AsyncExec(const wxString batFilePath, const wxString cwd, const wxString appName) {
 	wxLogStatus("\"%s\" is running please wait...", appName);
 
 	wxExecuteEnv* env = new wxExecuteEnv();
