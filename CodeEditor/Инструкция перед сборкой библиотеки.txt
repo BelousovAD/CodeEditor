@@ -1,0 +1,33 @@
+	1. Системная переменная:
+WXWIN = C:\wxWidgets-3.2.2.1
+	2. Переменные среды:
+%WXWIN%\lib\vc_x64_lib
+C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools
+	3. Файл LexO2M.cxx положить в папку %WXWIN%\src\stc\scintilla\lexers
+	4. В файл %WXWIN%\src\stc\scintilla\include\SciLexer.h дописать строки по аналогии с другими лексерами:
+#define SCLEX_O2M 122
+#define SCE_O2M_DEFAULT 0
+#define SCE_O2M_NUMBER 1
+#define SCE_O2M_SINGLESTRING 2
+#define SCE_O2M_DOUBLESTRING 3
+#define SCE_O2M_CHARACTER 4
+#define SCE_O2M_KEYWORD 5
+#define SCE_O2M_BLOCKCOMMENT 6
+#define SCE_O2M_LINECOMMENT 7
+	5. В файлы %WXWIN%\include\wx\stc\stc.h и %WXWIN%\interface\wx\stc\stc.h дописать строки по аналогии с другими лексерами:
+#define wxSTC_LEX_O2M 122
+#define wxSTC_O2M_DEFAULT 0
+#define wxSTC_O2M_NUMBER 1
+#define wxSTC_O2M_SINGLESTRING 2
+#define wxSTC_O2M_DOUBLESTRING 3
+#define wxSTC_O2M_CHARACTER 4
+#define wxSTC_O2M_KEYWORD 5
+#define wxSTC_O2M_BLOCKCOMMENT 6
+#define wxSTC_O2M_LINECOMMENT 7
+	6. В файл %WXWIN%\src\stc\scintilla\lexers\descrip.mms дописать строки по аналогии с другими лексерами:
+Добавить LexO2M.obj к одной из переменных OBJECTS
+Добавить LexO2M.cxx к одной из переменных SOURCES
+LexO2M.obj : LexO2M.cxx
+	7. В файл %WXWIN%\src\stc\scintilla\src\Catalogue.cxx дописать строки по аналогии с другими лексерами:
+LINK_LEXER(lmO2M);
+	8. Cобрать библиотеку
