@@ -106,18 +106,22 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::OnProjectNew(wxCommandEvent& event) {
+	if (m_projectInfo) {
+		wxMessageBox(_("Cannot create the project. "
+			"You are required to close the currently open project."),
+			_("Error"),
+			wxOK, this);
+		return;
+	}
+	else {
+		m_projectInfo = new ProjectInfo();
+	}
+
 	wxDirDialog newProjectDialog(this, _("Choose directory"),
 		wxEmptyString,
 		wxDD_DEFAULT_STYLE | wxDD_CHANGE_DIR);
 	if (newProjectDialog.ShowModal() == wxID_CANCEL) {
 		return;
-	}
-
-	if (m_projectInfo) {
-		OnProjectClose(event);
-	}
-	else {
-		m_projectInfo = new ProjectInfo();
 	}
 
 	wxString dirpath = newProjectDialog.GetPath();
@@ -163,6 +167,17 @@ void MainWindow::OnProjectSave(wxCommandEvent& event) {
 }
 
 void MainWindow::OnProjectOpen(wxCommandEvent& event) {
+	if (m_projectInfo) {
+		wxMessageBox(_("Cannot create the project. "
+			"You are required to close the currently open project."),
+			_("Error"),
+			wxOK, this);
+		return;
+	}
+	else {
+		m_projectInfo = new ProjectInfo();
+	}
+
 	wxFileDialog openProjectDialog(this, _("Open project"),
 		wxEmptyString, wxEmptyString,
 		_("Project file (*.pro)|*.pro"),
@@ -170,13 +185,6 @@ void MainWindow::OnProjectOpen(wxCommandEvent& event) {
 
 	if (openProjectDialog.ShowModal() == wxID_CANCEL) { // если нажата "отмена" в окне выбора файла
 		return;
-	}
-
-	if (m_projectInfo) {
-		OnProjectClose(event);
-	}
-	else {
-		m_projectInfo = new ProjectInfo();
 	}
 
 	m_projectInfo->directory = openProjectDialog.GetDirectory();
