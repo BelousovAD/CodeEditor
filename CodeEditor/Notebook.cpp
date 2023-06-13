@@ -40,13 +40,14 @@ void Notebook::OnFileOpen(wxCommandEvent& event) {
 
 void Notebook::OnNotebookPageCloseByNotebook(wxAuiNotebookEvent& event) {
 	Editor* currentPage = (Editor*)GetCurrentPage(); // указатель на текущую вкладку
+	wxString filepath = currentPage->GetFilepath();
 	if (currentPage->IsModified()) {
 		int response = wxMessageBox(_("Do you want to save the changes in this file?"),
 			_("Confirm the action"),
 			wxYES_NO | wxCANCEL,
 			this);
 		if (response == wxYES) {
-			currentPage->SaveFile();
+			currentPage->SaveFile(filepath);
 		}
 		else {
 			if (response == wxCANCEL) {
@@ -58,23 +59,17 @@ void Notebook::OnNotebookPageCloseByNotebook(wxAuiNotebookEvent& event) {
 }
 
 void Notebook::OnNotebookPageCloseByMainWindow(wxAuiNotebookEvent& event) {
-	Editor* currentPage = nullptr;
-	wxString filepath = event.GetString();
-	int	index = filepath.IsEmpty() ? 
-		0 : IndexIfFileOpenedInNotebook(filepath);
-	if (index == -1) {
-		return;
-	}
-	currentPage = (Editor*)GetPage(index);
+	Editor* currentPage = (Editor*)GetPage(0);
+	wxString filepath = currentPage->GetFilepath();
 	if (currentPage->IsModified()) {
 		int response = wxMessageBox(
 			wxString::Format(_("Do you want to save the changes in file %s?"),
-				GetPageText(index).Before('*')),
+				GetPageText(0).Before('*')),
 			_("Confirm the action"),
 			wxYES_NO | wxCANCEL,
 			this);
 		if (response == wxYES) {
-			currentPage->SaveFile();
+			currentPage->SaveFile(filepath);
 		}
 		else {
 			if (response == wxCANCEL) {
@@ -83,7 +78,7 @@ void Notebook::OnNotebookPageCloseByMainWindow(wxAuiNotebookEvent& event) {
 			}
 		}
 	}
-	this->DeletePage(index);
+	this->DeletePage(0);
 }
 
 void Notebook::OnSavePointReached(wxStyledTextEvent& WXUNUSED(event)) {
