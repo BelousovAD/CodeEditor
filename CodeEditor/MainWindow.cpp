@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "defsexternal.h"
 
+#include "HelpWindow.h"
 #include "ObjectExplorerWindow.h"
 #include "wx/dir.h"
 #include <shellapi.h>
@@ -78,6 +79,8 @@ MainWindow::MainWindow(wxWindow* parent,
 
 	Bind(wxEVT_MENU, &Notebook::OnHighlightLanguage, m_Notebook, ID_HIGHLIGHTFIRST, ID_HIGHLIGHTLAST);
 	Bind(wxEVT_MENU, &MainWindow::OnSetTargetPlatform, this, ID_TargetMIN, ID_TargetMAX);
+
+	Bind(wxEVT_MENU, &MainWindow::OnHelp, this, ID_Help);
 
 	Bind(wxEVT_CLOSE_WINDOW, &MainWindow::OnCloseWindow, this);
 
@@ -670,6 +673,11 @@ void MainWindow::OnSetTargetPlatform(wxCommandEvent& event) {
 	SetProjectState(true);
 }
 
+void MainWindow::OnHelp(wxCommandEvent& event) {
+	HelpWindow Help(this);
+	Help.ShowModal();
+}
+
 void MainWindow::OnUpdateFileMenu(wxUpdateUIEvent& event) {
 	switch (event.GetId())
 	{
@@ -846,11 +854,15 @@ wxMenuBar* MainWindow::CreateMenuBar() {
 		syntaxHighlightMenu->AppendRadioItem(ID_HIGHLIGHTFIRST + i, g_LanguageSettings[i].name);
 	}
 
+	wxMenu* helpMenu = new wxMenu();
+	helpMenu->Append(ID_Help, _("&Help"));
+
 	menuBar->Append(fileMenu, _("&File"));
 	menuBar->Append(projectMenu, _("&Project"));
 	menuBar->Append(settingsMenu, _("&Settings"));
 	menuBar->Append(runMenu, _("&Run"));
 	menuBar->Append(syntaxHighlightMenu, _("&Highlight language"));
+	menuBar->Append(helpMenu, _("&Help"));
 
 	return menuBar;
 }

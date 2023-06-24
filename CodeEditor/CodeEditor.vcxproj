@@ -24,6 +24,7 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="defsexternal.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="HelpWindow.h" />
     <ClInclude Include="ImportsList.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="languageSettings.h" />
@@ -39,6 +40,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="HelpWindow.cpp" />
     <ClCompile Include="ImportsList.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="languageSettings.cpp" />

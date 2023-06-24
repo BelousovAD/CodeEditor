@@ -17,7 +17,6 @@ ObjectExplorerWindow::ObjectExplorerWindow(wxWindow* parent,
 	: wxDialog (parent, id, title, pos, size, style, name) {
 
 	m_ObjectExplorer = new ObjectExplorer(this);
-	wxButton* okButton = new wxButton(this, wxID_OK, "OK");
 
 	for (int i = 0; i < projectInfo.files.size(); i++) {
 		std::vector<std::pair<wxString, int>> objects;
@@ -70,7 +69,6 @@ ObjectExplorerWindow::ObjectExplorerWindow(wxWindow* parent,
 
 	wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
 	topSizer->Add(m_ObjectExplorer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	topSizer->Add(okButton, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 	SetSizerAndFit(topSizer);
 
 	Bind(wxEVT_SIZE, &ObjectExplorerWindow::OnSize, this);
@@ -79,7 +77,8 @@ ObjectExplorerWindow::ObjectExplorerWindow(wxWindow* parent,
 ObjectExplorerWindow::~ObjectExplorerWindow() {
 	m_ObjectExplorer->Destroy();
 	m_ObjectExplorer = nullptr;
-}
+};
+
 void ObjectExplorerWindow::OnSize(wxSizeEvent& event) {
 	wxSize size = this->GetClientSize();
 	m_ObjectExplorer->SetSize(size.GetWidth() - 10, size.GetHeight() - 10);

@@ -60,6 +60,8 @@ private:
 
 	void OnSetTargetPlatform(wxCommandEvent& event);
 
+	void OnHelp(wxCommandEvent& event);
+
 	void OnUpdateFileMenu(wxUpdateUIEvent& event);
 	void OnUpdateProjectMenu(wxUpdateUIEvent& event);
 	void OnUpdateRunMenu(wxUpdateUIEvent& event);
