@@ -77,6 +77,7 @@ private:
 	Console* CreateConsole();
 	bool CreateNewFile(const wxString& filepath);
 	void CreateTempDirectories();
+	void DeleteTempDirectories();
 	void ClearTempDirectories();
 	void IncludeFile(const wxString& filename);
 	void ExcludeFile(const int& index, const wxString& filename);

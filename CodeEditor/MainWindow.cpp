@@ -163,6 +163,7 @@ void MainWindow::OnProjectNew(wxCommandEvent& event) {
 
 void MainWindow::OnProjectSave(wxCommandEvent& event) {
 	m_projectInfo->SaveProjectInfo();
+	DeleteTempDirectories();
 	SetProjectState(false);
 }
 
@@ -692,6 +693,7 @@ void MainWindow::OnUpdateRunMenu(wxUpdateUIEvent& event) {
 	switch (event.GetId()) {
 	case ID_Execute:
 		event.Enable(m_projectInfo &&
+			!m_projectInfo->ProjectHaveChanges &&
 			wxFileExists(m_projectInfo->directory +
 				wxFileName::GetPathSeparator() +
 				"Make" +
@@ -699,6 +701,7 @@ void MainWindow::OnUpdateRunMenu(wxUpdateUIEvent& event) {
 				m_projectInfo->execFile));
 	case ID_Build:
 		event.Enable(m_projectInfo &&
+			!m_projectInfo->ProjectHaveChanges &&
 			wxFileExists(m_projectInfo->directory +
 				wxFileName::GetPathSeparator() +
 				"CPP" +
@@ -707,6 +710,7 @@ void MainWindow::OnUpdateRunMenu(wxUpdateUIEvent& event) {
 		break;
 	case ID_Compile:
 		event.Enable(m_projectInfo);
+		event.Enable(m_projectInfo && !m_projectInfo->ProjectHaveChanges);
 		break;
 	}
 }
@@ -887,6 +891,26 @@ void MainWindow::CreateTempDirectories() {
 	if (!wxDirExists(m_projectInfo->directory +
 		wxFileName::GetPathSeparator() + "Make")) {
 		wxDir::Make(m_projectInfo->directory +
+			wxFileName::GetPathSeparator() + "Make");
+	}
+}
+
+void MainWindow::DeleteTempDirectories() {
+	ClearTempDirectories();
+
+	if (wxDirExists(m_projectInfo->directory +
+		wxFileName::GetPathSeparator() + "CPP")) {
+		wxDir::Remove(m_projectInfo->directory +
+			wxFileName::GetPathSeparator() + "CPP");
+	}
+	if (wxDirExists(m_projectInfo->directory +
+		wxFileName::GetPathSeparator() + "DFN")) {
+		wxDir::Remove(m_projectInfo->directory +
+			wxFileName::GetPathSeparator() + "DFN");
+	}
+	if (wxDirExists(m_projectInfo->directory +
+		wxFileName::GetPathSeparator() + "Make")) {
+		wxDir::Remove(m_projectInfo->directory +
 			wxFileName::GetPathSeparator() + "Make");
 	}
 }
