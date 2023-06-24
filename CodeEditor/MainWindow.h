@@ -35,6 +35,8 @@ private:
 	void OnProjectOpen(wxCommandEvent& event);
 	void OnProjectClose(wxCommandEvent& event);
 
+	void OnObjectExplorerOpen(wxCommandEvent& event);
+
 	void OnDirAppend(wxCommandEvent& event);
 	void OnDirUp(wxCommandEvent& event);
 	void OnDirDown(wxCommandEvent& event);
@@ -90,6 +92,7 @@ private:
 	Notebook* m_Notebook = nullptr;
 	Console* m_Console = nullptr;
 	ProjectExplorer* m_ProjectExplorer = nullptr;
+	ProjectExplorer* m_ObjectExplorer = nullptr;
 
 	long m_NotebookStyle = NULL;
 	ProjectInfo* m_projectInfo = nullptr;

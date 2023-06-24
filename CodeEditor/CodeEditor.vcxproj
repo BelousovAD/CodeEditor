@@ -20,11 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="CodeEditorConfig.h" />
+    <ClInclude Include="Console.h" />
     <ClInclude Include="defsexternal.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="ImportsList.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="languageSettings.h" />
     <ClInclude Include="Notebook.h" />
+    <ClInclude Include="ObjectExplorer.h" />
+    <ClInclude Include="ObjectExplorerWindow.h" />
     <ClInclude Include="ProjectInfo.h" />
     <ClInclude Include="ProjectExplorer.h" />
     <ClInclude Include="resource.h" />
@@ -32,10 +37,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="ImportsList.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="languageSettings.cpp" />
     <ClCompile Include="Notebook.cpp" />
+    <ClCompile Include="ObjectExplorer.cpp" />
+    <ClCompile Include="ObjectExplorerWindow.cpp" />
     <ClCompile Include="ProjectExplorer.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "defsexternal.h"
 
+#include "ObjectExplorerWindow.h"
 #include "wx/dir.h"
 #include <shellapi.h>
 
@@ -68,6 +69,8 @@ MainWindow::MainWindow(wxWindow* parent,
 	Bind(wxEVT_MENU, &MainWindow::OnProjectOpen, this, ID_ProjectOpen);
 	Bind(wxEVT_MENU, &MainWindow::OnProjectSave, this, ID_ProjectSave);
 	Bind(wxEVT_MENU, &MainWindow::OnProjectClose, this, ID_ProjectClose);
+
+	Bind(wxEVT_MENU, &MainWindow::OnObjectExplorerOpen, this, ID_ObjectExplorerOpen);
 
 	Bind(wxEVT_MENU, &MainWindow::OnCompile, this, ID_Compile);
 	Bind(wxEVT_MENU, &MainWindow::OnBuild, this, ID_Build);
@@ -229,6 +232,11 @@ void MainWindow::OnProjectClose(wxCommandEvent& event) {
 	m_projectInfo = nullptr;
 	SetProjectState();
 	m_ProjectExplorer->DeleteAllItems();
+}
+
+void MainWindow::OnObjectExplorerOpen(wxCommandEvent& event) {
+	ObjectExplorerWindow ObjectExplorer(this, GetProjectInfo());
+	ObjectExplorer.ShowModal();
 }
 
 void MainWindow::OnDirAppend(wxCommandEvent& event) {
@@ -685,7 +693,9 @@ void MainWindow::OnUpdateProjectMenu(wxUpdateUIEvent& event) {
 		event.Enable(m_projectInfo && m_projectInfo->ProjectHaveChanges);
 		break;
 	case ID_ProjectClose:
+	case ID_ObjectExplorerOpen:
 		event.Enable(m_projectInfo);
+		break;
 	}
 }
 
@@ -709,7 +719,6 @@ void MainWindow::OnUpdateRunMenu(wxUpdateUIEvent& event) {
 				m_config.Makefile));
 		break;
 	case ID_Compile:
-		event.Enable(m_projectInfo);
 		event.Enable(m_projectInfo && !m_projectInfo->ProjectHaveChanges);
 		break;
 	}
@@ -812,6 +821,8 @@ wxMenuBar* MainWindow::CreateMenuBar() {
 	projectMenu->Append(ID_ProjectNew, _("&New project"));
 	projectMenu->Append(ID_ProjectOpen, _("&Open project"));
 	projectMenu->Append(ID_ProjectSave, _("&Save project"));
+	projectMenu->AppendSeparator();
+	projectMenu->Append(ID_ObjectExplorerOpen, _("&Open Object explorer"));
 	projectMenu->AppendSeparator();
 	projectMenu->Append(ID_ProjectClose, _("&Close project"));
 
