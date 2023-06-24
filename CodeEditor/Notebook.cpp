@@ -59,7 +59,21 @@ void Notebook::OnNotebookPageCloseByNotebook(wxAuiNotebookEvent& event) {
 }
 
 void Notebook::OnNotebookPageCloseByMainWindow(wxAuiNotebookEvent& event) {
-	Editor* currentPage = (Editor*)GetPage(0);
+	if (GetPageCount() == 0) {
+		return;
+	}
+
+	int index;
+	if (event.GetString().IsEmpty()) {
+		index = 0;
+	}
+	else {
+		index = IndexIfFileOpenedInNotebook(event.GetString());
+	}
+	if (index < 0) {
+		return;
+	}
+	Editor* currentPage = (Editor*)GetPage(index);
 	wxString filepath = currentPage->GetFilepath();
 	if (currentPage->IsModified()) {
 		int response = wxMessageBox(
