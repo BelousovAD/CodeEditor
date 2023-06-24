@@ -63,10 +63,11 @@ class LexerO2M : public ILexer {
 	int GetLengthNextWordIfInList(WordList &keywordList, StyleContext &context, LexAccessor &styler);
     int GetLengthNextNumber(CharacterSet &characterSet, StyleContext &context, LexAccessor &styler);
     int GetLengthNextCharacter(CharacterSet &characterSet, StyleContext &context, LexAccessor &styler);
+    int GetLengthNextIdentifier(StyleContext& context, LexAccessor& styler);
 
 public:
 	LexerO2M():
-        setNumber(CharacterSet::setDigits, ".+-ABCDEFX"),
+        setNumber(CharacterSet::setDigits, ".+-ABCDEFH"),
         setCharacter(CharacterSet::setDigits, "ABCDEFX") {
     }
 
@@ -137,8 +138,9 @@ int LexerO2M::GetLengthNextWordIfInList(WordList &keywordList, StyleContext &con
 }
 
 int LexerO2M::GetLengthNextNumber(CharacterSet &characterSet, StyleContext &context, LexAccessor &styler) {
-    std::regex integerNumber("(\\d[A-F]*H|\\d+)");
-    std::regex realNumber("\\d+\\.\\d*([ED][\\+-]\\d+)?");
+    std::regex hexadecimalNumber("^\\d[0-9A-F]*H$");
+    std::regex integerNumber("^\\d+$");
+    std::regex realNumber("^\\d+\\.\\d+([ED][\\+-]\\d+)?$");
     char word[256];
     Sci_Position currPos = (Sci_Position)context.currentPos;
     int i = 0;
@@ -151,7 +153,9 @@ int LexerO2M::GetLengthNextNumber(CharacterSet &characterSet, StyleContext &cont
         i++;
     }
     word[i] = '\0';
-    if (std::regex_match(word, integerNumber) || std::regex_match(word, realNumber)) {
+    if (std::regex_match(word, hexadecimalNumber) ||
+        std::regex_match(word, realNumber) ||
+        std::regex_match(word, integerNumber)) {
         return i;
     }
     else {
@@ -160,7 +164,7 @@ int LexerO2M::GetLengthNextNumber(CharacterSet &characterSet, StyleContext &cont
 }
 
 int LexerO2M::GetLengthNextCharacter(CharacterSet &characterSet, StyleContext &context, LexAccessor &styler) {
-    std::regex character("\\d[0-9A-F]{0,2}X");
+    std::regex character("^\\d[0-9A-F]{0,2}X$");
     char word[256];
     Sci_Position currPos = (Sci_Position)context.currentPos;
     int i = 0;
@@ -179,6 +183,19 @@ int LexerO2M::GetLengthNextCharacter(CharacterSet &characterSet, StyleContext &c
     else {
         return 0;
     }
+}
+
+int LexerO2M::GetLengthNextIdentifier(StyleContext& context, LexAccessor& styler) {
+    int i = 0;
+    Sci_Position currPos = (Sci_Position)context.currentPos;
+    char ch = context.ch;
+
+    while (IsAlphaNumeric(ch)) { // find end of identifier
+        ++i;
+        ch = styler.SafeGetCharAt(currPos + i);
+    }
+
+    return i;
 }
 
 Sci_Position SCI_METHOD LexerO2M::WordListSet(int n, const char* wl) {
@@ -227,7 +244,13 @@ void SCI_METHOD LexerO2M::Lex(unsigned int startPos, int lengthDoc, int initStyl
 					context.SetState(SCE_O2M_KEYWORD);
 					context.Forward(len - 1);
 				}
-			}
+			} else if ((context.ch >= 'a') && (context.ch <= 'z') ||
+                (context.ch >= 'A') && (context.ch <= 'Z')) {
+                int len = GetLengthNextIdentifier(context, styler);
+                if (len) {
+                    context.Forward(len - 1);
+                }
+            }
 		}
 		else {
 			switch (context.state) {

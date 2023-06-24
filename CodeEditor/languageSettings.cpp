@@ -35,7 +35,7 @@ const std::vector<LanguageInfo> g_LanguageSettings = {
       {wxSTC_O2M_CHARACTER, "fore:KHAKI"},
       {wxSTC_O2M_KEYWORD, "fore:BLUE"},
       {wxSTC_O2M_BLOCKCOMMENT, "fore:FOREST GREEN"},
-      {wxSTC_O2M_LINECOMMENT, "fore:FOREST GREEN"},
+      {wxSTC_O2M_LINECOMMENT, "fore:RED"},
      },
      {{KEYWORDLIST_0, O2MWordList0},
      },
